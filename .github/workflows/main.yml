@@ -33,15 +33,15 @@ jobs:
       # Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t Adebayo2007/devops:${{ github.sha }} .
-          docker tag Adebayo2007/devops:${{ github.sha }} Adebayo2007/devops:latest
+          docker build -t adebayo2007/devops:${{ github.sha }} .
+          docker tag adebayo2007/devops:${{ github.sha }} adebayo2007/devops:latest
 
       # Log in to Docker Hub using access token from GitHub secret
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.CALCULATOR }}" | docker login -u Adebayo2007 --password-stdin
+        run: echo "${{ secrets.CALCULATOR }}" | docker login -u adebayo2007 --password-stdin
 
       # Push Docker image to Docker Hub
       - name: Push Docker image to Docker Hub
         run: |
-          docker push Adebayo2007/devops:${{ github.sha }}
-          docker push Adebayo2007/devops:latest
+          docker push adebayo2007/devops:${{ github.sha }}
+          docker push adebayo2007/devops:latest
