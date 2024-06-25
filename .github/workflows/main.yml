@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
 
 jobs:
   build:
@@ -14,11 +14,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Adjust to your Node.js version
+
       - name: Install dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build
+      - name: Set executable permissions for Jest (if needed)
+        run: chmod +x node_modules/.bin/jest
 
       - name: Run tests with Jest
-        run: npm test
+        run: npm run test
