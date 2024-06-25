@@ -1,5 +1,3 @@
-# Assuming your GitHub Actions workflow file (e.g., main.yml)
-
 name: Node.js CI with Docker Build, Test, and Push
 
 on:
@@ -36,7 +34,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t Adebayo2007/devops:${{ github.sha }} .
-          docker tag Adebayo2007/devops:${{ github.sha }} Adebayo2007/devops:calculator_image
+          docker tag Adebayo2007/devops:${{ github.sha }} Adebayo2007/devops:latest
 
       # Log in to Docker Hub
       - name: Log in to Docker Hub
@@ -46,4 +44,4 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: |
           docker push Adebayo2007/devops:${{ github.sha }}
-          docker push Adebayo2007/devops:calculator_image
+          docker push Adebayo2007/devops:latest
