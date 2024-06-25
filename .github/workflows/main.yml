@@ -36,9 +36,9 @@ jobs:
           docker build -t Adebayo2007/devops:${{ github.sha }} .
           docker tag Adebayo2007/devops:${{ github.sha }} Adebayo2007/devops:latest
 
-      # Log in to Docker Hub
+      # Log in to Docker Hub using access token from GitHub secret
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.CALCULATOR }}" | docker login -u "${{ secrets.CALCULATOR }}" --password-stdin
+        run: echo "${{ secrets.CALCULATOR }}" | docker login -u Adebayo2007 --password-stdin
 
       # Push Docker image to Docker Hub
       - name: Push Docker image to Docker Hub
