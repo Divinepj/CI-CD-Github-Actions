@@ -1,4 +1,6 @@
-name: Node.js CI
+# Assuming your GitHub Actions workflow file (e.g., main.yml)
+
+name: Node.js CI with Docker Build, Test, and Push
 
 on:
   push:
@@ -7,12 +9,12 @@ on:
     branches: [main]
 
 jobs:
-  conditional-job:
+  build-test-and-deploy:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    # The job runs only for push events to the 'main' branch.
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Install Node.js and npm
         uses: actions/setup-node@v2
@@ -22,8 +24,26 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Set executable permissions for Jest (if needed)
+      # Set executable permissions for Jest (if needed)
+      - name: Set executable permissions for Jest
         run: chmod +x node_modules/.bin/jest
 
+      # Run tests with Jest
       - name: Run tests with Jest
         run: npm run test
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t Adebayo2007/devops:${{ github.sha }} .
+          docker tag Adebayo2007/devops:${{ github.sha }} Adebayo2007/devops:calculator_image
+
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.CALCULATOR }}" | docker login -u "${{ secrets.CALCULATOR }}" --password-stdin
+
+      # Push Docker image to Docker Hub
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push Adebayo2007/devops:${{ github.sha }}
+          docker push Adebayo2007/devops:calculator_image
