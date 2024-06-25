@@ -7,12 +7,12 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  conditional-job:
     runs-on: ubuntu-latest
-
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # The job runs only for push events to the 'main' branch.
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Install Node.js and npm
         uses: actions/setup-node@v2
