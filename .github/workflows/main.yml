@@ -20,5 +20,5 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Run tests
+      - name: Run tests with Jest
         run: npm test
