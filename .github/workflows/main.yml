@@ -63,3 +63,61 @@ jobs:
         run: |
           docker push adebayo2007/devops:${{ github.sha }}
           docker push adebayo2007/devops:latest
+
+  bump-version-and-tag:
+    name: Bump version and tag
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+        # This action automatically increments the patch version and tags the commit.
+        # 'DEFAULT_BUMP' specifies the type of version bump (major, minor, patch).
+
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+      
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+      
+        - name: Create Release
+          id: create_release
+          uses: actions/create-release@v1
+          env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+              tag_name: ${{ github.ref }}
+              release_name: Release ${{ github.ref }}
+                # This step creates a new release in GitHub using the tag name.
+
+  deploy-to-aws:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+              
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+              
+        - name: Set up AWS credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: us-west-2
+      # Configures AWS credentials from GitHub secrets.
+              
+        - name: Deploy to AWS
+          run: |
+            # Add your deployment script here.
+            # For example, using AWS CLI commands to deploy.
