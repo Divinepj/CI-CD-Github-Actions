@@ -17,9 +17,11 @@ jobs:
         node-version: [18, 20]  # Specify Node.js versions to test
 
     steps:
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Step 2: Cache Node Modules
       - name: Cache Node Modules
         uses: actions/cache@v2
         with:
@@ -28,44 +30,46 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      # Step 3: Install Node.js and npm
       - name: Install Node.js and npm
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
 
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: npm install
-      
-      # Run ESLint
+
+      # Step 5: Run ESLint
       - name: Run Linter
         run: npx eslint .
-      # 'npx eslint .' runs the ESLint tool on all the files in your repository.
-      # ESLint is a static code analysis tool used to identify problematic patterns in JavaScript code.
-    
-      # Set executable permissions for Jest (if needed)
+        # ESLint is a static code analysis tool for identifying problematic patterns in JavaScript.
+
+      # Step 6: Set executable permissions for Jest (if needed)
       - name: Set executable permissions for Jest
         run: chmod +x node_modules/.bin/jest
 
-      # Run tests with Jest
+      # Step 7: Run tests with Jest
       - name: Run tests with Jest
         run: npm run test
 
-      # Build the Docker image
+      # Step 8: Build the Docker image
       - name: Build Docker image
         run: |
           docker build -t adebayo2007/devops:${{ github.sha }} .
           docker tag adebayo2007/devops:${{ github.sha }} adebayo2007/devops:latest
 
-      # Log in to Docker Hub using access token from GitHub secret
+      # Step 9: Log in to Docker Hub using access token from GitHub secret
       - name: Log in to Docker Hub
         run: echo "${{ secrets.CALCULATOR }}" | docker login -u adebayo2007 --password-stdin
 
-      # Push Docker image to Docker Hub
+      # Step 10: Push Docker image to Docker Hub
       - name: Push Docker image to Docker Hub
         run: |
           docker push adebayo2007/devops:${{ github.sha }}
           docker push adebayo2007/devops:latest
 
+  # Step 11: Bump version and tag (runs only on push to main branch)
   bump-version-and-tag:
     name: Bump version and tag
     runs-on: ubuntu-latest
@@ -80,18 +84,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
-        # This action automatically increments the patch version and tags the commit.
-        # 'DEFAULT_BUMP' specifies the type of version bump (major, minor, patch).
+        # Automatic version bumping and tagging based on push events to main branch.
 
+  # Step 12: Create GitHub release (runs on tag push)
   create-release:
     name: Create Release
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-  
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-    
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -100,27 +104,27 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-        # This step creates a new release in GitHub using the tag name.
+        # Creates a GitHub release when a tag is pushed.
 
-
+  # Step 13: Deploy to AWS (runs only on push to main branch)
   deploy-to-aws:
     name: Deploy to AWS
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-              
+
     steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
-              
-        - name: Set up AWS credentials
-          uses: aws-actions/configure-aws-credentials@v1
-          with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: us-west-2
-      # Configures AWS credentials from GitHub secrets.
-              
-        - name: Deploy to AWS
-          run: |
-            # Add your deployment script here.
-            # For example, using AWS CLI commands to deploy.
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+        # Configures AWS credentials for deployment.
+
+      - name: Deploy to AWS
+        run: |
+          # Add your deployment script here.
+          # For example, using AWS CLI commands to deploy.
