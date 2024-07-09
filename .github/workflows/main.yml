@@ -87,12 +87,6 @@ jobs:
         # Automatic version bumping and tagging based on push events to main branch.
 
   # Step 12: Create GitHub release (runs on tag push)
-  create-release:
-    name: Create Release
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-
-    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
