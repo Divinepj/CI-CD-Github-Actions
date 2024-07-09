@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "node build.js",
-    "lint": "eslint ."  // Add this line to run ESLint via npm
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "eslint": "^9.6.0",  // Ensure the correct version of ESLint is added
-    "@eslint/eslintrc": "^1.0.0"  // Add the eslintrc package
+    "eslint": "^9.6.0",
+    "@eslint/eslintrc": "^1.0.0"
   }
 }
