@@ -85,20 +85,21 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-      
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
+    
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            with:
-            tag_name: ${{ github.ref }}
-            release_name: Release ${{ github.ref }}
-                # This step creates a new release in GitHub using the tag name.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+        # This step creates a new release in GitHub using the tag name.
+
 
   deploy-to-aws:
     name: Deploy to AWS
