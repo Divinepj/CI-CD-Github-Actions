@@ -87,9 +87,6 @@ jobs:
         # Automatic version bumping and tagging based on push events to main branch.
 
   # Step 12: Create GitHub release (runs on tag push)
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
