@@ -93,10 +93,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-        # Creates a GitHub release when a tag is pushed.
-
+            tag_name: ${{ github.ref }}
+            release_name: Release ${{ github.ref }}
+            draft: false
+            prerelease: false
+  
   # Step 13: Deploy to AWS (runs only on push to main branch)
   deploy-to-aws:
     name: Deploy to AWS
