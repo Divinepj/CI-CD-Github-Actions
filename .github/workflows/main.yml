@@ -85,6 +85,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
         # Automatic version bumping and tagging based on push events to main branch.
+      
+        # Debug GitHub context
+      - name: Debug GitHub Context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
   # Step 12: Create GitHub release (runs on tag push)
       - name: Create Release
