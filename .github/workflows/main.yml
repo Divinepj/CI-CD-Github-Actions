@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14, 16, 18, 20]  # Specify Node.js versions to test
+        node-version: [18, 20]  # Specify Node.js versions to test
 
     steps:
       - name: Checkout code
