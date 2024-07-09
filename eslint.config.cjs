@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     files: ["**/*.js"],
     extends: ["eslint:recommended"],
