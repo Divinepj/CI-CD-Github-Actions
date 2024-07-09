@@ -86,23 +86,7 @@ jobs:
           DEFAULT_BUMP: patch
         # Automatic version bumping and tagging based on push events to main branch.
       
-        # Debug GitHub context
-      - name: Debug GitHub Context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
 
-  # Step 12: Create GitHub release (runs on tag push)
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-            tag_name: ${{ github.ref }}
-            release_name: Release ${{ github.ref }}
-            draft: false
-            prerelease: false
   
   # Step 13: Deploy to AWS (runs only on push to main branch)
   deploy-to-aws:
