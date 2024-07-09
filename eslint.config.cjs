@@ -1,7 +1,9 @@
+const { FlatCompat } = require('@eslint/eslintrc');
+const compat = new FlatCompat();
+
 module.exports = [
-  {
+  ...compat.config({
     files: ["**/*.js"],
-    extends: ["eslint:recommended"],
     rules: {
       "indent": ["error", 2],
       "linebreak-style": ["error", "unix"],
@@ -14,5 +16,5 @@ module.exports = [
       "es6": true,
       "jest": true  // If you are using Jest for testing
     }
-  }
+  })
 ];
